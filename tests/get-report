@@ -1,0 +1,3 @@
+#!/bin/sh
+export LC_ALL=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8 COLUMNS=90
+cat > test.hledger && LEDGER_FILE=test.hledger "$TESTDIR/../hledger-vat-report.py" "$@"

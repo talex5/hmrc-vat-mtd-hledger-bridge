@@ -1,0 +1,20 @@
+2017-04-01 Invoice 000 to client
+        income:job                      -£100.00  ; VAT:20 (income tax charged on this)
+        liabilities:output-vat          -£ 20.00  ; VAT charged on the above
+        assets:receivable:invoices       £120.00  ; Gross total
+
+2020-07-01 Invoice 001 to client
+        income:job                      -£100.00  ; VAT:20 (income tax charged on this)
+        liabilities:output-vat          -£ 20.00  ; VAT charged on the above
+        assets:receivable:invoices       £120.00  ; Gross total
+
+2020-09-30 Invoice 002 to client
+        income:job                      -£200.00  ; VAT:20 (income tax charged on this)
+	expenses:goods			-£100.01  ; VAT:20 (not profit for income tax)
+        liabilities:output-vat          -£ 60.00  ; VAT charged on the above
+        assets:receivable:invoices       £360.01  ; Gross total
+
+2020-10-01 Invoice 003 to client
+        income:job                      -£100.00  ; VAT:20 (income tax charged on this)
+        liabilities:output-vat          -£ 20.00  ; VAT charged on the above
+        assets:receivable:invoices       £120.00  ; Gross total
