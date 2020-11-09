@@ -113,7 +113,7 @@ doesn't support UTF-8 and so can't handle the `£` sign!
 The `hmrc-api.py` file can be used to interact with the REST service.
 
 Before starting, you have to go to [developer.service.hmrc.gov.uk][add-app] to create a new application.
-This will then give you the `client_id` and `client_secret` values.
+This will then give you `client_id` and `client_secret` values.
 You'll ask need to add `http://localhost:7000` to the list of `Redirect URIs`.
 
 To test this, you can [create a test user][].

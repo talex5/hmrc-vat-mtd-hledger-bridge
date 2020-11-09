@@ -147,6 +147,8 @@ def do_oauth():
     return oauth.fetch_token(
         api + "oauth/token",
         authorization_response=authorization_response,
+        include_client_id = True,
+        client_id=client_id,
         client_secret=client_secret)
 
 token = load_token()
@@ -216,7 +218,7 @@ def submit_return():
 def create_test_user():
     client = BackendApplicationClient(client_id=client_id)
     oauth = OAuth2Session(client=client)
-    token = oauth.fetch_token(token_url=api+'/oauth/token', client_id=client_id, client_secret=client_secret)
+    token = oauth.fetch_token(token_url=api+'/oauth/token', include_client_id=True, client_id=client_id, client_secret=client_secret)
     headers = {
         'Accept': 'application/vnd.hmrc.1.0+json',
         'Content-Type': 'application/json',
@@ -230,7 +232,7 @@ def create_test_user():
 def fraud_prevention():
     client = BackendApplicationClient(client_id=client_id)
     oauth = OAuth2Session(client=client)
-    token = oauth.fetch_token(token_url=api+'/oauth/token', client_id=client_id, client_secret=client_secret)
+    token = oauth.fetch_token(token_url=api+'/oauth/token', include_client_id=True, client_id=client_id, client_secret=client_secret)
     headers = {
         'Accept': 'application/vnd.hmrc.1.0+json',
     }
