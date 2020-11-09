@@ -9,7 +9,8 @@ import os, sys, subprocess, json, io
 from datetime import datetime
 
 my_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-rest_api = os.path.join(my_dir, 'hmrc-api.py')
+rest_api = os.environ.get('HMRC_REST_API', None)
+if rest_api == None: rest_api = os.path.join(my_dir, 'hmrc-api.py')
 hledger_return = os.path.join(my_dir, 'hledger-vat-report.py')
 
 def error(*x):
@@ -22,7 +23,7 @@ def show_date(x): return datetime.strftime(x, '%Y-%m-%d')
 if len(sys.argv) != 2: error("usage: %s config.json" % sys.argv[0])
 config_path, = sys.argv[1:]
 
-obligations = json.loads(subprocess.check_output([rest_api, config_path, 'get-obligations']))['obligations']
+obligations = json.loads(subprocess.check_output([rest_api, config_path, 'get-obligations'], input=""))['obligations']
 
 oldest_open = None
 for ob in obligations:
