@@ -93,7 +93,7 @@ On success, it will produce a JSON document:
 }
 ```
 
-These numbers should match what you'd get from following the instructions at [vat-form][].
+These numbers should match what you'd get from following the instructions at [VAT Notice 700/12][vat-form].
 Note that for the flat-rate scheme, `totalValueSalesExVAT` ("box 6") is actually inclusive of VAT!!
 
 > Box 6 total value of sales  
@@ -112,13 +112,13 @@ doesn't support UTF-8 and so can't handle the `£` sign!
 
 The `hmrc-api.py` file can be used to interact with the REST service.
 
-Before starting, you have to go to [developer.service.hmrc.gov.uk][add-app] to create a new application.
-This will then give you `client_id` and `client_secret` values.
-You'll ask need to add `http://localhost:7000` to the list of `Redirect URIs`.
+Before starting, go to [developer.service.hmrc.gov.uk][add-app] to create a new application:
+- Get the `client_id` and `client_secret` values from there.
+- Add `http://localhost:7000` to the list of `Redirect URIs`.
 
-To test this, you can [create a test user][].
+To test this, [create a test user][].
 This will produce a test `vrn` (VAT registration number) and a new user ID and password.
-You'll need to enter those in the test server when running the tests.
+Enter those credentials in the test server when running the tests.
 
 Create a configuration file with the various settings, e.g. save this as `test-config.json`:
 
@@ -135,12 +135,12 @@ Create a configuration file with the various settings, e.g. save this as `test-c
 ```
 
 - `endpoint` should initially be set to the test endpoint, as shown.
-- `client_id` and `client_secret` you got when creating the app.
+- `client_id` and `client_secret` from creating the app.
 - `vrn` is the value for the test user created above.
-- `device_id` is a unique ID for your device (generate one with `python -c 'import uuid; print(uuid.uuid4())'`).
+- `device_id` is a unique ID for the device (generate one with `python -c 'import uuid; print(uuid.uuid4())'`).
 - `device_manufacturer` and `device_model` are for the [fraud prevention headers][].
 
-With this, you can query for the test-user's VAT obligations.
+With this, we can query for the test-user's VAT obligations.
 
 ```
 $ ./hmrc-api.py test-config.json get-obligations > obligations.json
@@ -209,7 +209,7 @@ A false declaration can result in prosecution.
 Confirm (enter 'confirm' to continue)
 ```
 
-Note that although we ask for obligations in the current year, the test server always asks for data from 2017.
+Note that although we ask for obligations in the current year, the test server always returns data from 2017.
 Also, once you've submitted the return it won't let you do it again.
 But it will continue to list the test obligation as open.
 
