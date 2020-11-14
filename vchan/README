@@ -1,0 +1,4 @@
+In template VM:
+
+echo '/home/user/hmrc-vat-mtd-hledger-bridge/vchan/recv.sh' > /etc/qubes-rpc/talex5.VAT
+chmod a+x /etc/qubes-rpc/talex5.VAT
