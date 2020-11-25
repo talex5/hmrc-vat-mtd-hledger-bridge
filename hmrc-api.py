@@ -7,6 +7,7 @@ import socket, sys, json, os, subprocess, time
 from datetime import datetime, timedelta
 from urllib import parse
 import requests
+import getpass
 
 def note(x, *args): print(x, *args, file=sys.stderr)
 def parse_date(x): return datetime.strptime(x, '%Y-%m-%d')
@@ -87,7 +88,7 @@ def get_fraud_headers():
     return {
         'Gov-Client-Connection-Method': 'DESKTOP_APP_DIRECT',
         'Gov-Client-Device-ID': dev_id,
-        'Gov-Client-User-IDs': 'os=%d' % (os.getuid ()),
+        'Gov-Client-User-IDs': 'os=%s' % (parse.quote(getpass.getuser())),
         'Gov-Client-Timezone': show_timezone(time.localtime()),
         'Gov-Client-Local-IPs': ','.join(parse.quote(x) for x in local_ips),
         'Gov-Client-MAC-Addresses': ','.join(parse.quote(x) for x in mac_addresses),
