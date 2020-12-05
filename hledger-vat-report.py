@@ -83,7 +83,7 @@ else:
     warn('No VAT supplies found in period!')
 
 note("\n== Output VAT ==")
-vat_charged = hledger(["r", "-p", period, "liabilities:output-vat"])
+vat_charged = hledger(["r", "-p", period, "liabilities:output-vat", "amt:<0"])
 if vat_charged:
     total_output_vat = -money(vat_charged[-1]['total'])
 else:

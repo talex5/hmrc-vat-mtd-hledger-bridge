@@ -315,3 +315,44 @@ Rounding errors:
     "totalValueGoodsSuppliedExVAT": 0,
     "totalAcquisitionsExVAT": 0
   }
+
+Ignore VAT returns:
+
+  $ get-report 2020-07-01 2020-09-30 << EOF >/dev/null
+  > 2020-06-01 Invoice 000 to client
+  >         income:job                      -£100.00  ; VAT:20 (income tax charged on this)
+  >         liabilities:output-vat          -£ 20.00  ; VAT charged on the above
+  >         assets:receivable:invoices       £120.00  ; Gross total
+  > 
+  > 2020-07-01 Invoice 001 to client
+  >         income:job                      -£100.00  ; VAT:20 (income tax charged on this)
+  >         liabilities:output-vat          -£ 20.00  ; VAT charged on the above
+  >         assets:receivable:invoices       £120.00  ; Gross total
+  > 
+  > 2020-08-01 Submit VAT return
+  >         liabilities:output-vat           £ 20.00  ; Move to payable
+  >         liabilities:payable:vat          £-20.00
+  > 
+  > 2020-09-30 Invoice 002 to client
+  >         income:job                      -£200.00  ; VAT:20 (income tax charged on this)
+  >         expenses:goods                  -£100.01  ; VAT:20 (not profit for income tax)
+  >         liabilities:output-vat          -£ 60.00  ; VAT charged on the above
+  >         assets:receivable:invoices       £360.01  ; Gross total
+  > EOF
+  Data for HMRC date range 2020-07-01 to 2020-09-30 (hledger period '2020-07-01 to 2020-10-01')
+  (flat-rate bonus applied; ends 2021-07-01)
+  
+  == Supplies ==
+  2020/07/01 Invoice 001 to client     income:job                     £-100.00      £-100.00
+  2020/09/30 Invoice 002 to client     income:job                     £-200.00      £-300.00
+                                       expenses:goods                 £-100.01      £-400.01
+  
+  == Output VAT ==
+  2020/07/01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
+  2020/09/30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-80.00
+  
+  == Summary ==
+  Total supplies on which we charged VAT: £400.01
+  Expected output VAT: £80.00 (based on total supplies)
+  Total output VAT: £80.00 (difference = £0.00)
+  VAT due on sales: £74.40 (flat-rate of 15.5% on £480.01)
