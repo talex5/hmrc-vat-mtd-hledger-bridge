@@ -33,6 +33,8 @@ dev_id = config['device_id']
 dev_manu = config['device_manufacturer']
 dev_model = config['device_model']
 
+if not api.endswith('/'): api += '/'
+
 def get_fraud_headers():
     def show_timezone(tm):
         m = tm.tm_gmtoff / 60
