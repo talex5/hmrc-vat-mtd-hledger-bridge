@@ -24,6 +24,11 @@ Check the example file:
   Expected output VAT: £80.00 (based on total supplies)
   Total output VAT: £80.00 (difference = £0.00)
   VAT due on sales: £74.40 (flat-rate of 15.5% on £480.01)
+  
+  2020-12-05 VAT return for 2020-07-01 to 2020-09-30
+          liabilities:output-vat          £    80.00
+          liabilities:payable:vat         £   -74.40
+          income:vat-flat-rate            £    -5.60
 
   $ jq . < report.json
   {
@@ -71,6 +76,11 @@ Forgot to tag something as VAT:
   Total output VAT: £80.00 (difference = £20.00)
   WARNING: Surprisingly large effect of rounding - missing VAT somewhere?
   VAT due on sales: £58.90 (flat-rate of 15.5% on £380.00)
+  
+  2020-12-05 VAT return for 2020-07-01 to 2020-09-30
+          liabilities:output-vat          £    80.00
+          liabilities:payable:vat         £   -58.90
+          income:vat-flat-rate            £   -21.10
   Warnings issued. Not writing report.
   [1]
 
@@ -102,6 +112,11 @@ Forgot to charge VAT:
   Total output VAT: £20.00 (difference = £-20.00)
   WARNING: Surprisingly large effect of rounding - missing VAT somewhere?
   VAT due on sales: £34.10 (flat-rate of 15.5% on £220.00)
+  
+  2020-12-05 VAT return for 2020-07-01 to 2020-09-30
+          liabilities:output-vat          £    20.00
+          liabilities:payable:vat         £   -34.10
+          income:vat-flat-rate            £    14.10
   Warnings issued. Not writing report.
   [1]
 
@@ -130,6 +145,11 @@ No reports found (excludes items before start date and after end date):
   Expected output VAT: £0.00 (based on total supplies)
   Total output VAT: £0.00 (difference = £0.00)
   VAT due on sales: £0.00 (flat-rate of 15.5% on £0.00)
+  
+  2020-12-05 VAT return for 2020-04-01 to 2020-06-30
+          liabilities:output-vat          £     0.00
+          liabilities:payable:vat         £     0.00
+          income:vat-flat-rate            £     0.00
   Warnings issued. Not writing report.
   [1]
 
@@ -174,6 +194,11 @@ Not month-aligned:
   Expected output VAT: £60.00 (based on total supplies)
   Total output VAT: £60.00 (difference = £0.00)
   VAT due on sales: £55.80 (flat-rate of 15.5% on £360.01)
+  
+  2020-12-05 VAT return for 2020-07-02 to 2020-09-30
+          liabilities:output-vat          £    60.00
+          liabilities:payable:vat         £   -55.80
+          income:vat-flat-rate            £    -4.20
   Warnings issued. Not writing report.
   [1]
 
@@ -200,6 +225,11 @@ Doesn't end with month:
   Expected output VAT: £0.00 (based on total supplies)
   Total output VAT: £0.00 (difference = £0.00)
   VAT due on sales: £0.00 (flat-rate of 15.5% on £0.00)
+  
+  2020-12-05 VAT return for 2020-01-01 to 2020-02-28
+          liabilities:output-vat          £     0.00
+          liabilities:payable:vat         £     0.00
+          income:vat-flat-rate            £     0.00
   Warnings issued. Not writing report.
   [1]
 
@@ -257,6 +287,11 @@ Bonus period ends:
   Expected output VAT: £80.00 (based on total supplies)
   Total output VAT: £80.00 (difference = £0.00)
   VAT due on sales: £79.20 (flat-rate of 16.5% on £480.01)
+  
+  2020-12-05 VAT return for 2021-07-01 to 2021-09-30
+          liabilities:output-vat          £    80.00
+          liabilities:payable:vat         £   -79.20
+          income:vat-flat-rate            £    -0.80
   Warnings issued. Not writing report.
 
 Invalid bonus period:
@@ -300,6 +335,11 @@ Rounding errors:
   Expected output VAT: £40.01 (based on total supplies)
   Total output VAT: £40.00 (difference = £-0.01)
   VAT due on sales: £37.21 (flat-rate of 15.5% on £240.04)
+  
+  2020-12-05 VAT return for 2020-07-01 to 2020-09-30
+          liabilities:output-vat          £    40.00
+          liabilities:payable:vat         £   -37.21
+          income:vat-flat-rate            £    -2.79
 
   $ jq . < report.json
   {
@@ -356,3 +396,8 @@ Ignore VAT returns:
   Expected output VAT: £80.00 (based on total supplies)
   Total output VAT: £80.00 (difference = £0.00)
   VAT due on sales: £74.40 (flat-rate of 15.5% on £480.01)
+  
+  2020-12-05 VAT return for 2020-07-01 to 2020-09-30
+          liabilities:output-vat          £    80.00
+          liabilities:payable:vat         £   -74.40
+          income:vat-flat-rate            £    -5.60

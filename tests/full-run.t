@@ -101,6 +101,11 @@ Run main.py:
   Total output VAT: £100.00 (difference = £0.00)
   VAT due on sales: £93.00 (flat-rate of 15.5% on £600.01)
   
+  *-*-* VAT return for 2017-04-01 to 2017-06-30 (glob)
+          liabilities:output-vat          £   100.00
+          liabilities:payable:vat         £   -93.00
+          income:vat-flat-rate            £    -7.00
+  
   === VAT return (2017-04-01 to 2017-06-30) ===
   {
     "vatDueSales": 93.0,

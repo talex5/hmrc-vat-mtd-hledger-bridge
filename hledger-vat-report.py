@@ -154,6 +154,12 @@ def handle_decimal(x):
 
 vat_report = { k: handle_decimal(v) for k, v in vat_report.items() }
 
+note("")
+note(f"{show_date(datetime.today())} VAT return for {periodStart} to {periodEndInclusive}")
+note(f"        liabilities:output-vat          £{total_output_vat:9,f}")
+note(f"        liabilities:payable:vat         £{-totalVatDue:9,f}")
+note(f"        income:vat-flat-rate            £{totalVatDue - total_output_vat:9,f}")
+
 if warnings == 0:
     json.dump(vat_report, sys.stdout)
 else:
