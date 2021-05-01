@@ -11,20 +11,22 @@ Try validating the fraud headers:
     "Gov-Client-Device-ID": "*", (glob)
     "Gov-Client-User-IDs": "os=*", (glob)
     "Gov-Client-Timezone": "UTC+00:00", (glob)
-    "Gov-Client-Local-IPs": "*", (glob)
-    "Gov-Client-MAC-Addresses": "*", (glob)
     "Gov-Client-Screens": "width=*&height=*&scaling-factor=*&colour-depth=*", (glob)
     "Gov-Client-Window-Size": "width=*&height=*", (glob)
-    "Gov-Client-User-Agent": "*/* (*/*)", (glob)
+    "Gov-Client-User-Agent": "os-family=*&os-version=*&device-manufacturer=*&device-model=*", (glob)
     "Gov-Client-Multi-Factor": "",
+    "Gov-Vendor-Product-Name": "TomsTaxes",
     "Gov-Vendor-Version": "TomsTaxes=1.0",
-    "Gov-Vendor-License-IDs": ""
+    "Gov-Vendor-License-IDs": "",
+    "Gov-Client-MAC-Addresses": "*", (glob)
+    "Gov-Client-Local-IPs": "*", (glob)
+    "Gov-Client-Local-IPs-Timestamp": "*" (glob)
   }
   Done
 
   $ jq . < results.json
   {
-    "specVersion": "2.x",
+    "specVersion": "3.0",
     "code": "POTENTIALLY_INVALID_HEADERS",
     "message": "At least 1 header is potentially invalid",
     "warnings": [

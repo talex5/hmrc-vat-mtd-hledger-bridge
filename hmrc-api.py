@@ -40,17 +40,6 @@ def get_fraud_headers():
         m = tm.tm_gmtoff / 60
         return 'UTC+%02d:%02d' % (m / 60, m % 60)
 
-    local_ips = []
-    mac_addresses = []
-    results = subprocess.check_output(['ip', 'address', 'show', 'up'], encoding='utf-8')
-    for line in results.split('\n'):
-        if line.startswith('    inet ') or line.startswith('    inet6 '):
-            addr = line.split()[1].split('/')[0]
-            if addr not in ('127.0.0.1', '::1'):
-                local_ips.append(addr)
-        if line.startswith('    link/ether '):
-            mac_addresses.append(line.split()[1])
-
     scale = float(subprocess.check_output(['gsettings', 'get', 'org.gnome.desktop.interface', 'text-scaling-factor']))
 
     screens = []
@@ -85,22 +74,43 @@ def get_fraud_headers():
 
     os_name = subprocess.check_output(['uname', '-s']).strip()
     os_version = subprocess.check_output(['uname', '-r']).strip()
-    user_agent = f'{parse.quote(os_name)}/{parse.quote(os_version)} ({parse.quote(dev_manu)}/{parse.quote(dev_model)})'
-
+    user_agent = parse.urlencode({
+        'os-family': os_name,
+        'os-version': os_version,
+        'device-manufacturer': dev_manu,
+        'device-model': dev_model,
+        }, quote_via = parse.quote)
     return {
         'Gov-Client-Connection-Method': 'DESKTOP_APP_DIRECT',
         'Gov-Client-Device-ID': dev_id,
         'Gov-Client-User-IDs': 'os=%s' % (parse.quote(getpass.getuser())),
         'Gov-Client-Timezone': show_timezone(time.localtime()),
-        'Gov-Client-Local-IPs': ','.join(parse.quote(x) for x in local_ips),
-        'Gov-Client-MAC-Addresses': ','.join(parse.quote(x) for x in mac_addresses),
         'Gov-Client-Screens': ','.join(screens),
         'Gov-Client-Window-Size': window_size,
         'Gov-Client-User-Agent': user_agent,
         'Gov-Client-Multi-Factor': '',
+        'Gov-Vendor-Product-Name': 'TomsTaxes',
         'Gov-Vendor-Version': 'TomsTaxes=1.0',
         'Gov-Vendor-License-IDs': '',
     }
+
+# Since version 3, some headers must be calculated before each request
+def finalise_fraud_headers(x):
+    local_ips = []
+    mac_addresses = []
+    results = subprocess.check_output(['ip', 'address', 'show', 'up'], encoding='utf-8')
+    for line in results.split('\n'):
+        if line.startswith('    inet ') or line.startswith('    inet6 '):
+            addr = line.split()[1].split('/')[0]
+            if addr not in ('127.0.0.1', '::1'):
+                local_ips.append(addr)
+        if line.startswith('    link/ether '):
+            mac_addresses.append(line.split()[1])
+    x['Gov-Client-MAC-Addresses'] = ','.join(parse.quote(x) for x in mac_addresses)
+    x['Gov-Client-Local-IPs'] = ','.join(parse.quote(x) for x in local_ips)
+    now = time.time()
+    ms = (int(now * 1000)) % 1000
+    x['Gov-Client-Local-IPs-Timestamp'] = time.strftime('%Y-%m-%dT%H:%M:%S.', time.gmtime(now)) + f"{ms:03d}Z"
 
 redirect_port = 7000
 redirect_uri = 'http://localhost:%d' % redirect_port
@@ -190,6 +200,7 @@ def get_obligations():
         headers = {
             'Accept': 'application/vnd.hmrc.1.0+json',
         }
+        finalise_fraud_headers(fraud_headers)
         headers.update(fraud_headers)
         try:
             r = oauth.get(api + "organisations/vat/{vrn}/obligations".format(vrn = vrn),
@@ -212,6 +223,7 @@ def submit_return():
         'Accept': 'application/vnd.hmrc.1.0+json',
         'Content-Type': 'application/json',
     }
+    finalise_fraud_headers(fraud_headers)
     headers.update(fraud_headers)
     r = oauth.post(api + '/organisations/vat/{vrn}/returns'.format(vrn = vrn), headers = headers, data = json.dumps((vat_return)))
     check_response(r)
@@ -240,6 +252,7 @@ def fraud_prevention():
         'Accept': 'application/vnd.hmrc.1.0+json',
     }
     fraud_headers = get_fraud_headers()
+    finalise_fraud_headers(fraud_headers)
     note('Sending fraud headers:\n' + json.dumps(fraud_headers, indent=2))
     headers.update(fraud_headers)
     r = oauth.get(api + '/test/fraud-prevention-headers/validate', headers = headers)

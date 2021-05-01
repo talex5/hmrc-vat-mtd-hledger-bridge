@@ -63,12 +63,11 @@ Run main.py:
     "Gov-Client-Device-ID": "*", (glob)
     "Gov-Client-User-IDs": "os=*", (glob)
     "Gov-Client-Timezone": "UTC+00:00", (glob)
-    "Gov-Client-Local-IPs": "*", (glob)
-    "Gov-Client-MAC-Addresses": "*", (glob)
     "Gov-Client-Screens": "width=*&height=*&scaling-factor=*&colour-depth=*", (glob)
     "Gov-Client-Window-Size": "width=*&height=*", (glob)
-    "Gov-Client-User-Agent": "*/* (*/*)", (glob)
+    "Gov-Client-User-Agent": "os-family=*&os-version=*&device-manufacturer=*&device-model=*", (glob)
     "Gov-Client-Multi-Factor": "",
+    "Gov-Vendor-Product-Name": "TomsTaxes",
     "Gov-Vendor-Version": "TomsTaxes=1.0",
     "Gov-Vendor-License-IDs": ""
   }
