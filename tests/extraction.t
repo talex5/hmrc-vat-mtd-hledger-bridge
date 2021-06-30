@@ -144,7 +144,7 @@ No reports found (excludes items before start date and after end date):
   Total supplies on which we charged VAT: £0.00
   Expected output VAT: £0.00 (based on total supplies)
   Total output VAT: £0.00 (difference = £0.00)
-  VAT due on sales: £0.00 (flat-rate of 15.5% on £0.00)
+  VAT due on sales: £0.00
   
   2020-12-05 VAT return for 2020-04-01 to 2020-06-30
           liabilities:output-vat          £     0.00
@@ -224,7 +224,7 @@ Doesn't end with month:
   Total supplies on which we charged VAT: £0.00
   Expected output VAT: £0.00 (based on total supplies)
   Total output VAT: £0.00 (difference = £0.00)
-  VAT due on sales: £0.00 (flat-rate of 15.5% on £0.00)
+  VAT due on sales: £0.00
   
   2020-12-05 VAT return for 2020-01-01 to 2020-02-28
           liabilities:output-vat          £     0.00
@@ -294,17 +294,42 @@ Bonus period ends:
           income:vat-flat-rate            £    -0.80
   Warnings issued. Not writing report.
 
-Invalid bonus period:
+Bonus ends during reporting period:
 
   $ get-report 2021-06-01 2021-09-30 2>&1 << EOF \
   > | grep -v 'WARNING: Period has not yet ended - report is incomplete'
-  > 2021-07-01 Invoice 001 to client
+  > 2021-06-30 Invoice 001 to client
   >         income:job                      -£100.00  ; VAT:20 (income tax charged on this)
   >         liabilities:output-vat          -£ 20.00  ; VAT charged on the above
   >         assets:receivable:invoices       £120.00  ; Gross total
+  >
+  > 2021-07-01 Invoice 002 to client
+  >         income:job                      -£200.00  ; VAT:20 (income tax charged on this)
+  >         liabilities:output-vat          -£ 40.00  ; VAT charged on the above
+  >         assets:receivable:invoices       £240.00  ; Gross total
   > EOF
   Data for HMRC date range 2021-06-01 to 2021-09-30 (hledger period '2021-06-01 to 2021-10-01')
-  Flat-rate ended during the period!
+  (flat-rate bonus ended during the period)
+  
+  == Supplies ==
+  2021-06-30 Invoice 001 to client     income:job                     £-100.00      £-100.00
+  2021-07-01 Invoice 002 to client     income:job                     £-200.00      £-300.00
+  
+  == Output VAT ==
+  2021-06-30 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
+  2021-07-01 Invoice 002 to client     liabilities:output-vat          £-40.00       £-60.00
+  
+  == Summary ==
+  Total supplies on which we charged VAT: £300.00
+  Expected output VAT: £60.00 (based on total supplies)
+  Total output VAT: £60.00 (difference = £0.00)
+  VAT due on sales: £58.20 (flat-rate of 15.5% on £120.00 + 16.5% on £240.00)
+  
+  2020-12-05 VAT return for 2021-06-01 to 2021-09-30
+          liabilities:output-vat          £    60.00
+          liabilities:payable:vat         £   -58.20
+          income:vat-flat-rate            £    -1.80
+  Warnings issued. Not writing report.
 
 Rounding errors:
 

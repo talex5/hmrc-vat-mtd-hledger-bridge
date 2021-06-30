@@ -4,9 +4,15 @@ from datetime import datetime, timedelta
 from dateutil import relativedelta
 D = decimal.Decimal
 
+def sum_money(items):
+    items = list(items)
+    if items == []: return D("0.00")
+    else: return sum(money(x) for x in items)
+
 vat_rate = 20
 flat_rate_without_bonus = 16.5          # Excluding first year bonus
 flat_rate_bonus = 1
+flat_rate_with_bonus = flat_rate_without_bonus - flat_rate_bonus
 flat_rate_bonus_end_date = '2021-07-01' # First period start when bonus doesn't apply
 
 warnings = 0
@@ -45,12 +51,13 @@ if period_end_excl.day != 1:
 flat_rate_bonus_end_date = parse_date(flat_rate_bonus_end_date)
 if period_start >= flat_rate_bonus_end_date:
     note("(flat-rate bonus period has ended)")
-    flat_rate = flat_rate_without_bonus
 elif period_end_excl >= flat_rate_bonus_end_date:
-    error('Flat-rate ended during the period!')
+    note('(flat-rate bonus ended during the period)')
 else:
     note("(flat-rate bonus applied; ends %s)" % show_date(flat_rate_bonus_end_date))
-    flat_rate = flat_rate_without_bonus - flat_rate_bonus
+def use_bonus_rate(line):
+    date = parse_date(line['date'])
+    return date < flat_rate_bonus_end_date
 
 def money(x): return D(x.strip('£').replace(',', ''))
 
@@ -76,19 +83,22 @@ def hledger(args):
 
 note("\n== Supplies ==")
 supplies = hledger(["r", "-p", period, "tag:VAT=%s" % vat_rate])
-if supplies:
-    total_supplies_excl_vat = -money(supplies[-1]['total'])
-else:
-    total_supplies_excl_vat = D('0.00')
+total_supplies_excl_vat_with_bonus    = -sum_money(x['amount'] for x in supplies if     use_bonus_rate(x))
+total_supplies_excl_vat_without_bonus = -sum_money(x['amount'] for x in supplies if not use_bonus_rate(x))
+total_supplies_excl_vat = total_supplies_excl_vat_with_bonus + \
+                          total_supplies_excl_vat_without_bonus
+if not supplies:
     warn('No VAT supplies found in period!')
 
 note("\n== Output VAT ==")
 vat_charged = hledger(["r", "-p", period, "liabilities:output-vat", "amt:<0"])
-if vat_charged:
-    total_output_vat = -money(vat_charged[-1]['total'])
-else:
-    total_output_vat = D('0.00')
+vat_charged_with_bonus    = -sum_money(x['amount'] for x in vat_charged if     use_bonus_rate(x))
+vat_charged_without_bonus = -sum_money(x['amount'] for x in vat_charged if not use_bonus_rate(x))
+total_output_vat = (vat_charged_with_bonus +
+                    vat_charged_without_bonus)
+if vat_charged == []:
     warn('No VAT reports found in period!')
+del vat_charged
 
 # This just used as a sanity check that we counted everything, calculating the VAT due on the
 # final total, rather than the total of the VAT we actually charged (which may differ due to rounding):
@@ -113,8 +123,24 @@ totalValueSalesIncludingVAT = total_supplies_excl_vat + total_output_vat
 # To calculate the VAT due under the Flat Rate Scheme, you must apply the flat
 # rate percentage for your trade sector to the total of all your supplies,
 # including VAT.
-vatDueSales = round_to_pence(totalValueSalesIncludingVAT * D(flat_rate) / 100)
-note("VAT due on sales: £%s (flat-rate of %s%% on £%s)" % (vatDueSales, flat_rate, totalValueSalesIncludingVAT))
+total_sales_inc_vat_with_bonus    = total_supplies_excl_vat_with_bonus    + vat_charged_with_bonus
+total_sales_inc_vat_without_bonus = total_supplies_excl_vat_without_bonus + vat_charged_without_bonus
+assert (total_sales_inc_vat_with_bonus + total_sales_inc_vat_without_bonus == totalValueSalesIncludingVAT)
+
+vat_due_with_bonus    = total_sales_inc_vat_with_bonus    * D(flat_rate_with_bonus)    / 100
+vat_due_without_bonus = total_sales_inc_vat_without_bonus * D(flat_rate_without_bonus) / 100
+
+vatDueSales = round_to_pence(vat_due_with_bonus + vat_due_without_bonus)
+
+vat_breakdown = ["%s%% on £%s" % (flat_rate, total)
+        for flat_rate, total in [(flat_rate_with_bonus,    total_sales_inc_vat_with_bonus),
+                                 (flat_rate_without_bonus, total_sales_inc_vat_without_bonus)]
+        if total > 0
+    ]
+if vat_breakdown:
+    note("VAT due on sales: £%s (flat-rate of %s)" % (vatDueSales, " + ".join(vat_breakdown)))
+else:
+    note("VAT due on sales: £%s" % vatDueSales)
 
 vatDueAcquisitions = 0
 totalVatDue = vatDueSales + vatDueAcquisitions          # Always just this sum
