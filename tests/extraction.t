@@ -11,13 +11,13 @@ Check the example file:
   (flat-rate bonus applied; ends 2021-07-01)
   
   == Supplies ==
-  2020/07/01 Invoice 001 to client     income:job                     £-100.00      £-100.00
-  2020/09/30 Invoice 002 to client     income:job                     £-200.00      £-300.00
+  2020-07-01 Invoice 001 to client     income:job                     £-100.00      £-100.00
+  2020-09-30 Invoice 002 to client     income:job                     £-200.00      £-300.00
                                        expenses:goods                 £-100.01      £-400.01
   
   == Output VAT ==
-  2020/07/01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
-  2020/09/30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-80.00
+  2020-07-01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
+  2020-09-30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-80.00
   
   == Summary ==
   Total supplies on which we charged VAT: £400.01
@@ -63,12 +63,12 @@ Forgot to tag something as VAT:
   (flat-rate bonus applied; ends 2021-07-01)
   
   == Supplies ==
-  2020/07/01 Invoice 001 to client     income:job                     £-100.00      £-100.00
-  2020/09/30 Invoice 002 to client     income:job                     £-200.00      £-300.00
+  2020-07-01 Invoice 001 to client     income:job                     £-100.00      £-100.00
+  2020-09-30 Invoice 002 to client     income:job                     £-200.00      £-300.00
   
   == Output VAT ==
-  2020/07/01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
-  2020/09/30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-80.00
+  2020-07-01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
+  2020-09-30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-80.00
   
   == Summary ==
   Total supplies on which we charged VAT: £300.00
@@ -100,11 +100,11 @@ Forgot to charge VAT:
   (flat-rate bonus applied; ends 2021-07-01)
   
   == Supplies ==
-  2020/07/01 Invoice 001 to client     income:job                     £-100.00      £-100.00
-  2020/08/01 Invoice 002 to client     income:job                     £-100.00      £-200.00
+  2020-07-01 Invoice 001 to client     income:job                     £-100.00      £-100.00
+  2020-08-01 Invoice 002 to client     income:job                     £-100.00      £-200.00
   
   == Output VAT ==
-  2020/08/01 Invoice 002 to client     liabilities:output-vat          £-20.00       £-20.00
+  2020-08-01 Invoice 002 to client     liabilities:output-vat          £-20.00       £-20.00
   
   == Summary ==
   Total supplies on which we charged VAT: £200.00
@@ -183,11 +183,11 @@ Not month-aligned:
   (flat-rate bonus applied; ends 2021-07-01)
   
   == Supplies ==
-  2020/09/30 Invoice 002 to client     income:job                     £-200.00      £-200.00
+  2020-09-30 Invoice 002 to client     income:job                     £-200.00      £-200.00
                                        expenses:goods                 £-100.01      £-300.01
   
   == Output VAT ==
-  2020/09/30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-60.00
+  2020-09-30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-60.00
   
   == Summary ==
   Total supplies on which we charged VAT: £300.01
@@ -248,10 +248,10 @@ Invalid VAT rate:
   WARNING: No VAT supplies found in period!
   
   == Output VAT ==
-  2020/07/01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
+  2020-07-01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
   
   == Summary ==
-  2020/07/01 Invoice 001 to client     income:job                     £-100.00      £-100.00
+  2020-07-01 Invoice 001 to client     income:job                     £-100.00      £-100.00
   Some items not at 20% VAT!!
   [1]
 
@@ -274,13 +274,13 @@ Bonus period ends:
   (flat-rate bonus period has ended)
   
   == Supplies ==
-  2021/07/01 Invoice 001 to client     income:job                     £-100.00      £-100.00
-  2021/09/30 Invoice 002 to client     income:job                     £-200.00      £-300.00
+  2021-07-01 Invoice 001 to client     income:job                     £-100.00      £-100.00
+  2021-09-30 Invoice 002 to client     income:job                     £-200.00      £-300.00
                                        expenses:goods                 £-100.01      £-400.01
   
   == Output VAT ==
-  2021/07/01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
-  2021/09/30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-80.00
+  2021-07-01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
+  2021-09-30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-80.00
   
   == Summary ==
   Total supplies on which we charged VAT: £400.01
@@ -323,12 +323,12 @@ Rounding errors:
   (flat-rate bonus applied; ends 2021-07-01)
   
   == Supplies ==
-  2020/07/01 Invoice 001 to client     income:job                     £-100.02      £-100.02
-  2020/08/01 Invoice 002 to client     income:job                     £-100.02      £-200.04
+  2020-07-01 Invoice 001 to client     income:job                     £-100.02      £-100.02
+  2020-08-01 Invoice 002 to client     income:job                     £-100.02      £-200.04
   
   == Output VAT ==
-  2020/07/01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
-  2020/08/01 Invoice 002 to client     liabilities:output-vat          £-20.00       £-40.00
+  2020-07-01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
+  2020-08-01 Invoice 002 to client     liabilities:output-vat          £-20.00       £-40.00
   
   == Summary ==
   Total supplies on which we charged VAT: £200.04
@@ -383,13 +383,13 @@ Ignore VAT returns:
   (flat-rate bonus applied; ends 2021-07-01)
   
   == Supplies ==
-  2020/07/01 Invoice 001 to client     income:job                     £-100.00      £-100.00
-  2020/09/30 Invoice 002 to client     income:job                     £-200.00      £-300.00
+  2020-07-01 Invoice 001 to client     income:job                     £-100.00      £-100.00
+  2020-09-30 Invoice 002 to client     income:job                     £-200.00      £-300.00
                                        expenses:goods                 £-100.01      £-400.01
   
   == Output VAT ==
-  2020/07/01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
-  2020/09/30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-80.00
+  2020-07-01 Invoice 001 to client     liabilities:output-vat          £-20.00       £-20.00
+  2020-09-30 Invoice 002 to client     liabilities:output-vat          £-60.00       £-80.00
   
   == Summary ==
   Total supplies on which we charged VAT: £400.01

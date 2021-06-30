@@ -86,13 +86,13 @@ Run main.py:
   (flat-rate bonus applied; ends 2021-07-01)
   
   == Supplies ==
-  2017/04/01 Invoice 002 to client     income:job                     £-200.00      £-200.00
+  2017-04-01 Invoice 002 to client     income:job                     £-200.00      £-200.00
                                        expenses:goods                 £-100.01      £-300.01
-  2017/06/30 Invoice 003 to client     income:job                     £-200.00      £-500.01
+  2017-06-30 Invoice 003 to client     income:job                     £-200.00      £-500.01
   
   == Output VAT ==
-  2017/04/01 Invoice 002 to client     liabilities:output-vat          £-60.00       £-60.00
-  2017/06/30 Invoice 003 to client     liabilities:output-vat          £-40.00      £-100.00
+  2017-04-01 Invoice 002 to client     liabilities:output-vat          £-60.00       £-60.00
+  2017-06-30 Invoice 003 to client     liabilities:output-vat          £-40.00      £-100.00
   
   == Summary ==
   Total supplies on which we charged VAT: £500.01
