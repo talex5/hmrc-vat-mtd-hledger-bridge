@@ -82,7 +82,7 @@ def hledger(args):
     return data
 
 note("\n== Supplies ==")
-supplies = hledger(["r", "-p", period, "tag:VAT=%s" % vat_rate])
+supplies = hledger(["register", "-p", period, "tag:VAT=%s" % vat_rate])
 total_supplies_excl_vat_with_bonus    = -sum_money(x['amount'] for x in supplies if     use_bonus_rate(x))
 total_supplies_excl_vat_without_bonus = -sum_money(x['amount'] for x in supplies if not use_bonus_rate(x))
 total_supplies_excl_vat = total_supplies_excl_vat_with_bonus + \
@@ -91,7 +91,7 @@ if not supplies:
     warn('No VAT supplies found in period!')
 
 note("\n== Output VAT ==")
-vat_charged = hledger(["r", "-p", period, "liabilities:output-vat", "amt:<0"])
+vat_charged = hledger(["register", "-p", period, "liabilities:output-vat", "amt:<0"])
 vat_charged_with_bonus    = -sum_money(x['amount'] for x in vat_charged if     use_bonus_rate(x))
 vat_charged_without_bonus = -sum_money(x['amount'] for x in vat_charged if not use_bonus_rate(x))
 total_output_vat = (vat_charged_with_bonus +
@@ -105,7 +105,7 @@ del vat_charged
 expected_output_vat = round_to_pence(total_supplies_excl_vat * D(vat_rate) / 100)
 
 note("\n== Summary ==")
-odd_supplies = hledger(["r", "-p", period, "tag:VAT", "not:tag:VAT=%s" % vat_rate])
+odd_supplies = hledger(["register", "-p", period, "tag:VAT", "not:tag:VAT=%s" % vat_rate])
 if odd_supplies:
     note("Some items not at %s%% VAT!!" % vat_rate)
     exit(1)
