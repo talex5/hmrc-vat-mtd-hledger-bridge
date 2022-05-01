@@ -8,6 +8,10 @@ from datetime import datetime, timedelta
 from urllib import parse
 import requests
 import getpass
+import logging
+
+logging.basicConfig()
+logging.getLogger().setLevel(logging.INFO)
 
 def note(x, *args): print(x, *args, file=sys.stderr)
 def parse_date(x): return datetime.strptime(x, '%Y-%m-%d')
@@ -225,7 +229,7 @@ def submit_return():
     }
     finalise_fraud_headers(fraud_headers)
     headers.update(fraud_headers)
-    r = oauth.post(api + '/organisations/vat/{vrn}/returns'.format(vrn = vrn), headers = headers, data = json.dumps((vat_return)))
+    r = oauth.post(api + 'organisations/vat/{vrn}/returns'.format(vrn = vrn), headers = headers, data = json.dumps((vat_return)))
     check_response(r)
     json.dump(r.json(), sys.stdout)
     note("Done")
@@ -233,13 +237,13 @@ def submit_return():
 def create_test_user():
     client = BackendApplicationClient(client_id=client_id)
     oauth = OAuth2Session(client=client)
-    token = oauth.fetch_token(token_url=api+'/oauth/token', include_client_id=True, client_id=client_id, client_secret=client_secret)
+    token = oauth.fetch_token(token_url=api+'oauth/token', include_client_id=True, client_id=client_id, client_secret=client_secret)
     headers = {
         'Accept': 'application/vnd.hmrc.1.0+json',
         'Content-Type': 'application/json',
     }
     request = { "serviceNames": [ "mtd-vat" ] }
-    r = oauth.post(api + '/create-test-user/individuals', headers = headers, data = json.dumps(request))
+    r = oauth.post(api + 'create-test-user/individuals', headers = headers, data = json.dumps(request))
     check_response(r)
     json.dump(r.json(), sys.stdout)
     note("Done")
@@ -247,7 +251,7 @@ def create_test_user():
 def fraud_prevention():
     client = BackendApplicationClient(client_id=client_id)
     oauth = OAuth2Session(client=client)
-    token = oauth.fetch_token(token_url=api+'/oauth/token', include_client_id=True, client_id=client_id, client_secret=client_secret)
+    token = oauth.fetch_token(token_url=api+'oauth/token', include_client_id=True, client_id=client_id, client_secret=client_secret)
     headers = {
         'Accept': 'application/vnd.hmrc.1.0+json',
     }
@@ -255,7 +259,7 @@ def fraud_prevention():
     finalise_fraud_headers(fraud_headers)
     note('Sending fraud headers:\n' + json.dumps(fraud_headers, indent=2))
     headers.update(fraud_headers)
-    r = oauth.get(api + '/test/fraud-prevention-headers/validate', headers = headers)
+    r = oauth.get(api + 'test/fraud-prevention-headers/validate', headers = headers)
     check_response(r)
     json.dump(r.json(), sys.stdout)
     note("Done")
